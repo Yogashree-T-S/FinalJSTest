@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+</head>
+<style>
+    #users {
+    
+        height: 500px;
+        width: 300px;
+        border-radius: 10px;
+    }
+
+    #add-user-btn {
+   
+        border-radius: 10px;
+        width: 150px;
+        height: 40px;
+    }
+
+    #main_container {
+        padding: 20px;
+      
+        border-radius: 20px;
+    }
+
+    .popupbg {
+        display: none;
+        position: fixed;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+     
+        z-index: 999;
+    }
+
+    #popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+     
+        padding: 35px;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        overflow-y: scroll;
+    }
+</style>
+
+<body>
+    <section id="main_container">
+        <div id="container1">
+            <button id="add-user-btn">Add New User</button>
+            <div id="users">
+                <h4>User List</h4>
+                <div id="user-list"></div>
+            </div>
+        </div>
+
+        <form id="popup" class="myform">
+            <label>Name:</label>
+            <input type="text" id="user-name" placeholder="Enter Name" required>
+            <label>Email:</label>
+            <input type="email" id="user-email" placeholder="Enter Email" required>
+            <button type="submit" id="submit-button">Add/Update User</button>
+        </form>
+        <div id="popupbg" class="popupbg"></div>
+    </section>
+
+    <script>
+        let usersData = [
+            { id: 1, name: "Yogashree", email: "yogashreesekar@gmail.com" },
+            { id: 2, name: "Keerthi", email: "Keerthi@gmail.com" },
+        ];
+
+        const userForm = document.getElementById("popup");
+        const userFormBg = document.getElementById("popupbg");
+        const addUserBtn = document.getElementById("add-user-btn");
+        const userNameInput = document.getElementById("user-name");
+        const userEmailInput = document.getElementById("user-email");
+        const submitBtn = document.getElementById("submit-button");
+
+        addUserBtn.addEventListener("click", () => {
+            openUserForm();
+            userNameInput.value = "";
+            userEmailInput.value = "";
+        });
+
+        userForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const name = userNameInput.value;
+            const email = userEmailInput.value;
+
+            if (submitBtn.innerText === "Add/Update User") {
+                addUser(name, email);
+            } else {
+                updateUser(submitBtn.dataset.userId, name, email);
+            }
+
+            closeUserForm();
+        });
+
+        function displayUserList() {
+            const userList = document.getElementById("user-list");
+            userList.innerHTML = "";
+
+            usersData.forEach((user) => {
+                const userItem = document.createElement("div");
+                userItem.innerHTML = `
+                    <h3>${user.name}</h3>
+                    <p>${user.email}</p>
+                    <button onclick="editUser(${user.id})">Edit</button>
+                    <button onclick="deleteUser(${user.id})">Delete</button>
+                `;
+                userList.appendChild(userItem);
+            });
+        }
+
+        function addUser(name, email) {
+            const id = usersData.length + 1;
+            const user = { id, name, email };
+            usersData.push(user);
+            displayUserList();
+        }
+
+        function editUser(id) {
+            const user = usersData.find((u) => u.id === id);
+            if (user) {
+                userNameInput.value = user.name;
+                userEmailInput.value = user.email;
+                submitBtn.innerText = "Update User";
+                submitBtn.dataset.userId = user.id;
+                openUserForm();
+            }
+        }
+
+        function updateUser(id, name, email) {
+            const userIndex = usersData.findIndex((u) => u.id == id);
+            if (userIndex !== -1) {
+                usersData[userIndex].name = name;
+                usersData[userIndex].email = email;
+                displayUserList();
+                resetUserForm();
+            }
+        }
+
+        function deleteUser(id) {
+            const userIndex = usersData.findIndex((u) => u.id === id);
+            if (userIndex !== -1) {
+                usersData.splice(userIndex, 1);
+                displayUserList();
+            }
+        }
+
+        function openUserForm() {
+            userForm.style.display = "block";
+            userFormBg.style.display = "block";
+        }
+
+        function closeUserForm() {
+            resetUserForm();
+            userForm.style.display = "none";
+            userFormBg.style.display = "none";
+        }
+
+        function resetUserForm() {
+            userNameInput.value = "";
+            userEmailInput.value = "";
+            submitBtn.innerText = "Add/Update User";
+            submitBtn.dataset.userId = "";
+        }
+
+        displayUserList();
+    </script>
+</body>
+</html>

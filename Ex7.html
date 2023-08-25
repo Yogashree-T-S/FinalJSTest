@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <textarea name="description" id="description" oninput="fill()"></textarea>
+    <p></p>
+</body>
+<script>
+    let show=document.querySelector('p')
+    let giver= document.getElementById('description')
+    function fill() {
+        // console.log(giver.value)
+        show.innerText=giver.value
+    }
+</script>
+</html>

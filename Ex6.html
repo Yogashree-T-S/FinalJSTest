@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button  onclick="Count()" name="click" type="button">Click</button>
+    <p>No of Times Clicked = <span id="Click">0</span></p>
+</body>
+<script>
+    var clickCount =0;
+    var click=document.getElementById("Click");
+    function Count() {
+        clickCount+=1;
+        click.innerText=clickCount;
+    }
+</script>
+</html>
